@@ -3,66 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生命原動力與互動風格測驗</title>
+    <title>生命原動力與互動風格測驗 (Cosmos Laundromat Edition)</title>
     <style>
+        /* 引入 Google 字體 */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Mono&display=swap');
+
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #f4f7f6;
-            --text: #34495e;
+            /* 視覺靈感來自 Blender Studio 《Cosmos Laundromat》 (CC0) */
+            --bg-dark: #05070a; /* 深邃的宇宙背景 */
+            --panel-bg: rgba(15, 20, 28, 0.96); /* 半透明控制面板 */
+            --text-main: #ecf0f1; /* 主要文字 */
+            --text-muted: #95a5a6; /* 次要文字 */
+            --accent-glow: #3498db; /* 神秘洗衣機的藍色光芒 */
+            --accent-active: #5dade2; /* 活躍狀態的藍色 */
+            --border-color: #2c3e50; /* 模擬洗衣機金屬邊框 */
+            
+            /* 人格類型標籤顏色 */
+            --color-pioneer: #2ecc71; /* 🟢 開拓者 */
+            --color-navigator: #f1c40f; /* 🟡 導航員 */
+            --color-guard: #e67e22; /* 🟠 精兵 */
+            --color-island: #e74c3c; /* 🔴 島嶼 */
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            margin: 0;
-            padding: 10px;
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            background-color: var(--bg-dark);
+            /* --- CC0 元素 1: 宇宙漩渦背景貼圖 (Inspired by Cosmos Laundromat) --- */
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(52, 152, 219, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(46, 204, 113, 0.05) 0%, transparent 40%),
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48ZyBmaWxsPSIjMWQyNTMyIiBmaWxsLW9wYWNpdHk9IjAuMSI+PHBhdGggZD0iTTAgMGg4MHY4MEgwVjB6bTQwIDQwSDBWMGg0MHY0MHpNMCA4MGg0MFY0MEgwVjgwem04MCAwSDRwVjQwSDgwVjhwek00MCAwaDQwdjQwSDQwVjB6Ii8+PC9nPjwvc3ZnPg=='); /* 極細微的幾何網格 */
+            background-attachment: fixed;
+            color: var(--text-main); 
+            line-height: 1.6; 
+            margin: 0; 
+            padding: 10px; 
             display: flex;
             justify-content: center;
+            min-height: 100vh;
+            align-items: center; /* 垂直居中 */
         }
-        .container {
-            max-width: 600px;
-            width: 100%;
-            background: white;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-            margin-top: 20px;
-        }
-        h1 { text-align: center; color: var(--primary); font-size: 1.4rem; margin-bottom: 25px; }
-        .progress { font-size: 0.8rem; color: #bdc3c7; margin-bottom: 8px; text-align: right; }
-        .q-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 20px; display: block; color: var(--primary); }
-        .options { display: flex; flex-direction: column; gap: 12px; }
-        button.opt {
-            background: #fff;
-            border: 2px solid #edf2f7;
-            padding: 15px;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
-            transition: all 0.2s ease;
-            font-size: 1rem;
-            color: var(--text);
-        }
-        button.opt:hover { border-color: var(--accent); background: #f0f9ff; transform: translateY(-1px); }
-        button.opt:active { transform: translateY(0); }
 
-        #result { display: none; }
-        .result-box { padding: 20px; border-radius: 12px; background: #f8fafc; border: 1px solid #e2e8f0; margin-top: 15px; }
-        .score-tag { font-weight: bold; color: var(--accent); font-size: 1.3rem; margin-bottom: 10px; }
-        .analysis-title { font-size: 1.2rem; margin-top: 0; color: #2d3748; }
-        .suggest-box { background: white; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 4px solid #cbd5e0; }
-        .btn-reload { margin-top: 25px; width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 1rem; }
+        .container { 
+            max-width: 680px; 
+            width: 100%;
+            background: var(--panel-bg); 
+            padding: 35px; 
+            border-radius: 24px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6); 
+            border: 2px solid var(--border-color);
+            backdrop-filter: blur(12px); /* 現代感的毛玻璃效果 */
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- CC0 元素 2: 洗衣機能量迴路動畫 (Inspired by Cosmos Laundromat) --- */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-glow), #2ecc71, transparent); /* 能量迴路藍綠流動 */
+            animation: cosmic-flow 4s linear infinite;
+        }
+
+        @keyframes cosmic-flow {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* --- CC0 元素 3: 洗衣機轉輪 SVG 圖案 Decor (Inspired by Cosmos Laundromat) --- */
+        .cosmic-decor {
+            position: absolute;
+            bottom: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            opacity: 0.03; /* 極低透明度，作為背景裝飾 */
+            fill: var(--accent-glow);
+            animation: washer-spin 20s linear infinite; /* 緩慢旋轉 */
+        }
+
+        @keyframes washer-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        h1 { 
+            text-align: center; 
+            color: var(--text-main); 
+            font-size: 1.7rem; 
+            margin-bottom: 35px; 
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5); /* 文字發光效果 */
+        }
+
+        .progress { 
+            font-size: 0.8rem; 
+            color: var(--text-muted); 
+            margin-bottom: 12px; 
+            text-align: right; 
+            font-family: 'Space Mono', monospace; /* 數字使用等寬字體 */
+            letter-spacing: 1px;
+        }
+
+        .q-text { 
+            font-weight: 600; 
+            font-size: 1.2rem; 
+            margin-bottom: 30px; 
+            display: block; 
+            color: var(--accent-active); 
+            border-left: 4px solid var(--accent-glow);
+            padding-left: 18px;
+        }
+
+        .options { display: flex; flex-direction: column; gap: 18px; }
+
+        button.opt { 
+            background: rgba(29, 37, 50, 0.4); 
+            border: 1px solid var(--border-color); 
+            padding: 20px; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            text-align: left; 
+            transition: all 0.3s ease; 
+            font-size: 1.05rem; 
+            color: var(--text-main);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 按鈕 Hover 時的洗衣機渦流發光效果 */
+        button.opt:hover { 
+            border-color: var(--accent-glow); 
+            background: rgba(52, 152, 219, 0.12); 
+            box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+            transform: translateY(-3px);
+        }
+
+        button.opt:active { transform: translateY(1px); }
+
+        #result { display: none; text-align: center;}
+
+        .result-box { 
+            padding: 30px; 
+            border-radius: 18px; 
+            background: rgba(5, 7, 10, 0.85); 
+            border: 2px solid var(--border-color); 
+            margin-top: 25px; 
+            text-align: left;
+            position: relative;
+        }
+
+        /* 分析結果頁面的洗衣機轉輪 Decor */
+        .result-box::after {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            width: 80px;
+            height: 80px;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48ZyBmaWxsPSIjMzQ5OGRiIiBmaWxsLW9wYWNpdHk9IjAuMDQiPjxpathkIGQ9Ik01MCAwQTI5LjI5IDI5LjI5IDAgMCAwIDIwLjcgMTAuNyAyOS4yOSAyOS4yOSAwIDAgMCAxMC43IDUwIDI5LjI5IDI5LjI5IDAgMCAwIDIwLjcgODkuMyAyOS4yOSAyOS4yOSAwIDAgMCA1MCA5OS4zIDI5LjI5 5OS4yOSAwIDAgMCA4OS4zIDU5LjMgMjkuMjkgMjkuMjkgMCAwIDAgMTAwIDUwIDI5LjI5IDI5LjI5IDAgMCAwIDg5LjMgMTAuNyAyOS4yOSAyOS4yOSAwIDAgMCA1MCAwek01MCA4NS45QTM1LjkgMzUuOSAwIDAgMSAxNC4xIDUwIDM1LjkgMzUuOSAwIDAgMSA1MCAxNC4xIDM1LjkgMzUuOSAwIDAgMSA4NS45IDUwIDM1LjkgMzUuOSAwIDAgMSA1MCA4NS45ek01MCAyOS45QTIwLjEgMjAuMSAwIDAgMCAyOS45IDUwIDIwLjEgMjAuMSAwIDAgMCA1MCA3MC4xIDIwLjEgMjAuMSAwIDAgMCA3MC4xIDUwIDIwLjEgMjAuMSAwIDAgMCA1MCAyOS45ek01MCA2MC45QTEwLjkgMTAuOSAwIDAgMSAzOS4xIDUwIDEwLjkgMTAuOSAwIDAgMSA1MCAzOS4xIDEwLjkgMTAuOSAwIDAgMSA2MC45IDUwIDEwLjkgMTAuOSAwIDAgMSA1MCA2MC45ek03NS45IDUwQTI1LjkgMjUuOSAwIDAgMCA1MCAyNC4xIDI1LjkgMjUuOSAwIDAgMCAyNC4xIDUwIDI1LjkgMjUuOSAwIDAgMCA1MCA3NS45IDI1LjkgMjUuOSAwIDAgMCA3NS45IDUwek03NS45IDUwQTI1LjkgMjUuOSAwIDAgMCA1MCAyNC4xek04OS4zIDU5LjNDNDUuOSA0NS45IDU0LjEgNDUuOSAxMC43IDUwQzU0LjEgNTQuMSA0NS45IDU0LjEgODkuMyA1OS4zek01MCA4NS45QzUwIDg1LjkgNTAgODUuOSAxNC4xIDUwek04OS4zIDEwLjdDNTQuMSAxNC4xIDQ1LjkgMTQuMSAxMC43IDUwek01MCAxNC4xQzUwIDE0LjEgNTAgMTQuMSAxNC4xIDUwek04NS45IDUwQzQ1LjkgNDUuOSA1NC4xIDU0LjEgMTQuMSA1MHpNOTkuMyA1MEM5OS4zIDUwIDk5LjMgNTAgMTAwIDUwek05OS4zIDUwQzk5LjMgNTAgOTkuMyA1MCAxMDAgNTB6Ii8+PC9nPjwvc3ZnPg==');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+        }
+
+        /* 人格類型標籤樣式 */
+        .type-tag {
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-family: 'Space Mono', monospace;
+        }
+
+        /* 根據類型的動態顏色 */
+        .type-pioneer { background-color: rgba(46, 204, 113, 0.18); color: var(--color-pioneer); border: 1px solid var(--color-pioneer); box-shadow: 0 0 15px rgba(46, 204, 113, 0.3); }
+        .type-navigator { background-color: rgba(241, 196, 15, 0.18); color: var(--color-navigator); border: 1px solid var(--color-navigator); box-shadow: 0 0 15px rgba(241, 196, 15, 0.3); }
+        .type-guard { background-color: rgba(230, 126, 34, 0.18); color: var(--color-guard); border: 1px solid var(--color-guard); box-shadow: 0 0 15px rgba(230, 126, 34, 0.3); }
+        .type-island { background-color: rgba(231, 76, 60, 0.18); color: var(--color-island); border: 1px solid var(--color-island); box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
+
+        .analysis-title { font-size: 1.5rem; margin-top: 0; color: var(--text-main); font-weight: 600; letter-spacing: 0.5px;}
+        
+        .suggest-box { 
+            background: rgba(29, 37, 50, 0.3); 
+            padding: 22px; 
+            border-radius: 12px; 
+            margin-top: 25px; 
+            border: 1px solid var(--border-color);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .suggest-box strong { color: var(--accent-active); }
+
+        .btn-reload { 
+            margin-top: 35px; 
+            width: 100%; 
+            padding: 16px; 
+            background: var(--accent-glow); 
+            color: white; 
+            border: none; 
+            border-radius: 14px; 
+            cursor: pointer; 
+            font-size: 1.15rem; 
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        .btn-reload:hover { 
+            background: var(--accent-active); 
+            box-shadow: 0 0 25px rgba(52, 152, 219, 0.6); 
+            transform: translateY(-2px);
+        }
+        .btn-reload:active { transform: translateY(1px); }
+
+        /* Footer CC0 聲明 */
+        .cc0-footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        .cc0-footer a { color: var(--accent-active); text-decoration: none; transition: color 0.2s; }
+        .cc0-footer a:hover { color: var(--text-main); }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>生命原動力與互動風格測驗</h1>
+<svg class="cosmic-decor" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+    <g fill-opacity="1">
+        <path d="M50 0A29.29 29.29 0 0 0 20.7 10.7 29.29 29.29 0 0 0 10.7 50 29.29 29.29 0 0 0 20.7 89.3 29.29 29.29 0 0 0 50 99.3 29.29 29.29 0 0 0 89.3 89.3 29.29 29.29 0 0 0 100 50 29.29 29.29 0 0 0 89.3 10.7 29.29 29.29 0 0 0 50 0ekM50 85.9A35.9 35.9 0 0 1 14.1 50 35.9 35.9 0 0 1 50 14.1 35.9 35.9 0 0 1 85.9 50 35.9 35.9 0 0 1 50 85.9ekM50 29.9A20.1 20.1 0 0 0 29.9 50 20.1 20.1 0 0 0 50 70.1 20.1 20.1 0 0 0 70.1 50 20.1 20.1 0 0 0 50 29.9ekM50 60.9A10.9 10.9 0 0 1 39.1 50 10.9 10.9 0 0 1 50 39.1 10.9 10.9 0 0 1 60.9 50 10.9 10.9 0 0 1 50 60.9ekM75.9 50A25.9 25.9 0 0 0 50 24.1 25.9 25.9 0 0 0 24.1 50 25.9 25.9 0 0 0 50 75.9 25.9 25.9 0 0 0 75.9 50ekM75.9 50A25.9 25.9 0 0 0 50 24.1ekM89.3 59.3C45.9 45.9 54.1 45.9 10.7 50C54.1 54.1 45.9 54.1 89.3 59.3ekM50 85.9C50 85.9 50 85.9 14.1 50ekM89.3 10.7C54.1 14.1 45.9 14.1 10.7 50C54.1 14.1 45.9 14.1 10.7 10.7ekM50 14.1C50 14.1 50 14.1 14.1 50ekM85.9 50C45.9 45.9 54.1 54.1 14.1 50ekNOTk5LjMgNTBDOTkuMyA1MEM5OS4z 5MEMxMDAgNTBekNOTkuMyA1MEM5OS4zIDUwIDk5LjMgNTAgMTAwIDUwek05OS4zIDUwQzk5LjMgNTAgOTkuMy 5MEMxMDAgNTB6"/>
+    </g>
+</svg>
 
+<div class="container">
+    <h1>生命原動力與互動風格</h1>
+    
     <div id="quiz-part">
-        <div class="progress" id="progress">問題 1 / 24</div>
+        <div class="progress" id="progress">問題 01 / 24</div>
         <div id="question-content">
             <span class="q-text" id="q-text"></span>
             <div class="options">
@@ -74,20 +265,25 @@
     </div>
 
     <div id="result">
-        <h2>測驗結果分析</h2>
+        <h2>分析報告 (v1.2)</h2>
         <div class="result-box" id="result-box"></div>
-        <button class="btn-reload" onclick="location.reload()">重新測驗</button>
+        <button class="btn-reload" onclick="location.reload()">重新檢測</button>
+    </div>
+
+    <div class="cc0-footer">
+        理論基礎：沈清松外推理論 | 內容轉譯與協作：傅元罄 & AI | 視覺圖案：Inspired by Blender Studio (Cosmos Laundromat) | 本專案採 <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh_TW" target="_blank">CC0 授權</a>
     </div>
 </div>
 
 <script>
+    // ... quizData 陣列內容保持完全不變 (省略以節省篇幅) ...
     const quizData = [
         { q: "面對一個與自己專業完全無關的新領域知識時：", a: "覺得是一個擴展視野的好機會，即便現在用不到也想了解看看。", b: "會先評估時間成本，確定對目前目標有具體幫助才會深入。", c: "傾向於專注在自己已知的專業領域，認為深耕比廣博更重要。" },
         { q: "當你看到一位非常成功且有才華的人時：", a: "會產生一種想與之交流、甚至與其共事的嚮往感。", b: "會冷靜分析對方的成功模式，思考有哪些是可以複製的經驗。", c: "會提醒自己每個人都有不同的人生賽道，不需要過度關注他人的光環。" },
         { q: "對於「長遠理想」這件事，你的真實感受是：", a: "它是指引我行動的核心動力，即使現實艱難也值得追求。", b: "它是階段性的目標，應隨著現實環境的變化而不斷調整。", c: "它是生活的調劑，但在壓力大時，生存與穩定才是首要考量。" },
         { q: "在獨處且放鬆的時刻，你最常浮現的念頭是：", a: "想要創作、記錄想法，或主動傳訊息關心久未聯絡的朋友。", b: "檢視近期的待辦清單，思考如何優化接下來的生活節奏。", c: "享受純粹的安靜與休息，不希望被任何訊息或任務打擾。" },
         { q: "對於「陌生的人事物」，你的第一直覺通常是：", a: "應該藏著一些我還不知道的驚喜或好處。", b: "先保持距離觀察，確定安全、沒麻煩了再說。", c: "傾向於認為那可能是個麻煩或是騙局。" },
-        { q: "你認為「愛」最核心的表現應該是：", a: "因為欣賞對方，所以心甘情願、不求回報地對他好。", b: "雙方互相幫忙、提供情緒價值的一種平衡關係。", c: "為了不讓自己孤單，而產生的依賴感。" },
+        { q: "你認為「愛」最核心的表現應該是：", a: "因為欣賞對方，所以心甘情願、不求回報地對他好。", b: "雙方互相幫幫忙、提供情緒價值的一種平衡關係。", c: "為了不讓自己孤單，而產生的依賴感。" },
         { q: "當你嘗試解釋觀點但對方顯得困惑時，你的反應通常是：", a: "覺得溝通很有趣，會嘗試找不同的比喻或生活案例來重新轉述。", b: "認為可能雙方的認知基礎不同，會嘗試找一個折衷的簡單說法。", c: "認為既然觀點不同，就不強求對方理解，點到為止即可。" },
         { q: "面對與你立場完全相反的人（如支持不同政黨或教育觀點）：", a: "會好奇對方的邏輯是如何成形的，甚至想深入探討其背後的生命經驗。", b: "保持社交禮貌，尋求雙方都能接受的「最大公約數」來共處。", c: "認為道不同不相為謀，為了避免衝突，會選擇減少交集。" },
         { q: "當你學習一種新的表達方式或思考邏輯時：", a: "覺得自己看世界的「濾鏡」更新了，對原本熟悉的事物有了新感受。", b: "覺得獲得了一個實用的工具，能讓我在溝通或解決問題時更有效率。", c: "覺得這只是一種溝通技巧的磨練，本質上我還是原本的我。" },
@@ -102,7 +298,7 @@
         { q: "你如何評價自己的「大方」程度？", a: "只要能幫到人我就開心，付出的時候覺得自己心靈很富足。", b: "這是一種教養，我會在合理範圍內展現我的大方。", c: "我覺得付出就是損失，總覺得別人是在佔我便宜。" },
         { q: "當兩人堅持己見、爭執不下時，你最可能的提議是：", a: "「我們先不爭誰對誰錯，一起回頭去看看實際發生的細節是什麼？」", b: "「我們來對對看哪部分的邏輯有漏洞，找出一個最合理的結論。」", c: "「既然講不通，那我們就各自按照自己的方式負責，互不干涉。」" },
         { q: "聽完一場演講或看完一本好書後，你的感覺是：", a: "感覺生命被「滋養」了，看世界的方式似乎變得更有層次。", b: "記下一些能立即派上用場的重點或工具。", c: "雖然學到不少，但也消耗了大量能量，需要獨處恢復。" },
-        { q: "身處壯闊的大自然景觀中，你的感受最接近：", a: "感到自己與萬物交織在一起，體驗到一種超越自我的平靜。", b: "讚嘆大自然的規律與美感，並希望能將這份體驗記錄下來。", c: "覺得景色很美，但也會注意到環境的便利性或氣候的影響。" },
+        { q: "身處壯闊的大自然景觀中，你的感受最接近：", a: "感到自己與萬物交織在一起，體驗到一種超越自自我平靜。", b: "讚嘆大自然的規律與美感，並希望能將這份體驗記錄下來。", c: "覺得景色很美，但也會注意到環境的便利性或氣候的影響。" },
         { q: "當你嘗試新方法卻失敗時，你的第一反應是：", a: "感到好奇，想知道「現實情況」跟我原本想的有什麼出入。", b: "感到懊惱，會快速檢討流程，尋找下一個更有效率的工具。", c: "感到挫折，會先停下來休息，避免在情緒不穩時繼續嘗試。" },
         { q: "關於「事情的真相」，你的體會是：", a: "世界上有很多面貌，我們需要不斷學習才能看得更全面。", b: "事情一定有標準答案，只要掌握了邏輯我就能贏。", c: "真相並不重要，每個人都只相信他想相信的。" },
         { q: "你是否有過「解決了一個大難題後，感覺整個人重生了」的經驗？", a: "經常有。因為親手處理了現實問題，感覺腦袋跟心靈都被洗乾淨了。", b: "偶爾有。通常是完成大專案領到獎金後的成就感。", c: "很少。只覺得解決了一個麻煩，鬆了一口氣，真煩。" }
@@ -117,7 +313,11 @@
         document.getElementById('opt-a').innerText = item.a;
         document.getElementById('opt-b').innerText = item.b;
         document.getElementById('opt-c').innerText = item.c;
-        document.getElementById('progress').innerText = `問題 ${currentIdx + 1} / ${quizData.length}`;
+        
+        // 數字補零 (Space Mono 字體效果更好)
+        const qNum = (currentIdx + 1).toString().padStart(2, '0');
+        const totalNum = quizData.length.toString().padStart(2, '0');
+        document.getElementById('progress').innerText = `問題 ${qNum} / ${totalNum}`;
     }
 
     function handleSelect(points) {
@@ -136,30 +336,41 @@
         const resBox = document.getElementById('result-box');
         resPart.style.display = 'block';
 
+        let typeClass = "";
+        let typeLabel = "";
         let title = "";
         let desc = "";
         let suggest = "";
 
         if (score >= 61) {
-            title = "🟢 能量滿格的開拓者";
-            desc = "你的生命狀態如泉水般噴湧，不斷向外擴張。你天生擁有一種「想讓世界更好」的原始動力，不計較得失，更在乎與不同的人產生精彩火花。";
-            suggest = "1. 尋找同頻者：避免單向耗損。<br>2. 深度紮根：留點時間給安靜的獨處，讓開拓更有深度。";
+            typeClass = "type-pioneer";
+            typeLabel = "🟢 開拓者 / Pioneer";
+            title = "能量滿格的開拓者";
+            desc = "你的生命狀態如泉水般噴湧，不斷向外擴張。你天生擁有一種「想讓世界更好」的原始動力，不計較得得失，更在乎與不同的人產生精彩火花。";
+            suggest = "1. 尋找同頻者：避免單向耗損能量。<br>2. 深度紮根：留點時間給安靜的獨處，讓開拓更有深度。";
         } else if (score >= 49) {
-            title = "🟡 務實穩健的導航員";
+            typeClass = "type-navigator";
+            typeLabel = "🟡 導航員 / Navigator";
+            title = "務實穩健的導航員";
             desc = "你如河流般流動，但在邊界處會自我保護。你是一個平衡的合作者，既懂得開放心胸，也知道如何保護能量，習慣在確保安全與效率的前提下進行分享。";
             suggest = "1. 嘗試無目的學習：打破務實框架，帶給自己意外靈感。<br>2. 暫停思考：衝突時不急著講道理，先觀察對方的感受。";
         } else if (score >= 37) {
-            title = "🟠 守護堡壘的精兵";
+            typeClass = "type-guard";
+            typeLabel = "🟠 精兵 / Sentinel";
+            title = "守護堡壘的精兵";
             desc = "你的能量向內收縮，築起防禦的高牆。這通常是因為過去的善意曾被辜負，你把專業和冷靜當作盾牌，顯得可靠但有點難以接近。";
             suggest = "1. 從小地方開始分享：教導外行者或小孩，找回能量流動感。<br>2. 主動給予：每天嘗試做一件不求回報的小事。";
         } else {
-            title = "🔴 獨自修復的島嶼";
+            typeClass = "type-island";
+            typeLabel = "🔴 島嶼 / Island";
+            title = "獨自修復的島嶼";
             desc = "你的能量嚴重回流，處於低電量模式。你習慣把世界看成威脅，這並非本性，而是心靈為了存活而啟動的「省電模式」。";
             suggest = "1. 與非人類連結：去大自然走走或照顧植物，獲得無負擔的滋養。<br>2. 觀察而不評判：練習純粹觀察風景，慢慢拆掉防禦牆。";
         }
 
+        /* 這裡移除總分顯示 */
         resBox.innerHTML = `
-            <div class="score-tag">總分：${score}</div>
+            <div class="type-tag ${typeClass}">${typeLabel}</div>
             <h3 class="analysis-title">${title}</h3>
             <p>${desc}</p>
             <div class="suggest-box">
